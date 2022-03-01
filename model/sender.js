@@ -69,8 +69,8 @@ SenderSchema.pre("save", async function (next) {
 
 
 // method that matches user password
-SenderSchema.methods.matchPassword = async function(password){
-	return await bcrypt.compare(this.password, password)
+SenderSchema.methods.matchSenderPassword = async function(password){
+	return await bcrypt.compare(password, this.password)
 }
 
 // token generation method (this is not asynchronous)
