@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 // the sender's schema
 const SenderSchema = new mongoose.Schema({
@@ -52,6 +53,8 @@ const SenderSchema = new mongoose.Schema({
 		maxlength: [1500, "This field requires a minimum of 1500 characters"],
 		required: [true, "Please provide password"],
 	},
+	resetPasswordToken : String,
+	resetPasswordExpiry : Date
 	
 })
 
@@ -79,8 +82,21 @@ SenderSchema.methods.genSenderToken = function () {
 		{id: this._id},
 		process.env.JWT_SECRET,
 		{expiresIn: process.env.JWT_EXPIRY}
-		)
-	}
+	)
+}
+
+SenderSchema.methods.genSenderPasswordResetToken = function(){
+	// creating the reset sender token 
+	const resetSenderToken = crypto.randomBytes(25).toString("hex");
+
+	this.resetPasswordToken = crypto
+		.createHash("sha256")
+		.update(resetSenderToken)
+		.digest("hex")
+
+	this.resetPasswordExpiry = Date.now() + 30 *(60*1000)
+	return resetSenderToken
+}
 
 // creating the model
 const Sender = mongoose.model("Sender", SenderSchema)
