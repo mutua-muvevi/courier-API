@@ -17,6 +17,7 @@ connectDB()
 // middleware imports
 app.use(express.json())
 app.use("/api/sender", require("./routes/sender"))
+app.use("/api/vendor", require("./routes/vendor"))
 
 // error middleware
 app.use(errorHandler)

@@ -3,8 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-// the sender's schema
-const SenderSchema = new mongoose.Schema({
+// the admin Schema
+const AdminSchema = mongoose.Schema({
 	firstName: {
 		type: String,
 		minlength: [3, "This field requires a minimum of 3 characters"],
@@ -17,13 +17,6 @@ const SenderSchema = new mongoose.Schema({
 		minlength: [3, "This field requires a minimum of 3 characters"],
 		maxlength: [50, "This field requires a maximum of 50 characters"],
 		required: [true, "Please provide lastName"],
-		trim: true
-	},
-	location: {
-		type: String,
-		minlength: [3, "This field requires a minimum of 3 characters"],
-		maxlength: [50, "This field requires a maximum of 50 characters"],
-		required: [true, "Please provide location"],
 		trim: true
 	},
 	telephone: {
@@ -52,12 +45,10 @@ const SenderSchema = new mongoose.Schema({
 	},
 	resetPasswordToken : String,
 	resetPasswordExpiry : Date
-	
 })
 
-
-// hashing the password before saving to the database
-SenderSchema.pre("save", async function (next) {
+// hashing the passwords method
+AdminSchema.pre("save", async function(next){
 	if(!this.isModified("password")){
 		next()
 	}
@@ -67,35 +58,27 @@ SenderSchema.pre("save", async function (next) {
 	next()
 })
 
-
-// method that matches user password
-SenderSchema.methods.matchSenderPassword = async function(password){
+// matching password method
+AdminSchema.methods.matchAdminPassword = async function(password){
 	return await bcrypt.compare(password, this.password)
 }
 
-// token generation method (this is not asynchronous)
-SenderSchema.methods.genSenderToken = function () {
+// generating jwt sign token method
+AdminSchema.methods.genAdminToken = function(){
 	return jwt.sign(
 		{id: this._id},
 		process.env.JWT_SECRET,
-		{expiresIn: process.env.JWT_EXPIRY}
+		{expiresIn : JWT.EXPIRY}
 	)
 }
 
-SenderSchema.methods.genSenderPasswordResetToken = function(){
-	// creating the reset sender token 
-	const resetSenderToken = crypto.randomBytes(25).toString("hex");
 
-	this.resetPasswordToken = crypto
-		.createHash("sha256")
-		.update(resetSenderToken)
-		.digest("hex")
 
-	this.resetPasswordExpiry = Date.now() + 30 *(60*1000)
-	return resetSenderToken
-}
 
-// creating the model
-const Sender = mongoose.model("Sender", SenderSchema)
-	
-module.exports = Sender
+
+
+
+// the model
+const Admin = mongoose.model("Admin", AdminSchema)
+
+module.exports = Admin

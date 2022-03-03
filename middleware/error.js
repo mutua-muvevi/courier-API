@@ -7,7 +7,7 @@ const errorHandler = (err, req, res, next) => {
 
 	// duplication key error
 	if(err.code === 11000){
-		const message = "Duplication Key Error"
+		const message = err
 		error = new ErrorResponse(message, 400)
 	}
 	
