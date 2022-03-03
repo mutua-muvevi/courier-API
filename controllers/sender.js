@@ -58,7 +58,7 @@ exports.senderForgotPassword = async (req, res, next) => {
 		// checking if the email exists
 		const sender = await Sender.findOne({email})
 
-		if(!email) {
+		if(!sender) {
 			return next (new ErrorResponse("Email could not be sent", 400))
 		}
 

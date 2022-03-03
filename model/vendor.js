@@ -98,7 +98,7 @@ VendorSchema.methods.matchVendorPassword = async function(password) {
 VendorSchema.methods.genVendorToken = function(){
 	return jwt.sign(
 		{id: this.id},
-		process.env.VENDOR_JWT_SECRET,
+		process.env.JWT_SECRET,
 		{expiresIn: process.env.JWT_EXPIRY}
 	)
 }
