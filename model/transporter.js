@@ -4,7 +4,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt")
 
 // the transporter schema
-const TransporterSchema = mongoose.Schema({
+const TransporterSchema = new mongoose.Schema({
 	firstName: {
 		type: String,
 		minlength: [3, "This field requires a minimum of 3 characters"],
