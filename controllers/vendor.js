@@ -6,29 +6,9 @@ const crypto = require("crypto");
 // the registration controller
 exports.vendorRegistration = async (req, res, next) => {
 	try {
-		const {
-			firstName, 
-			lastName, 
-			businessName, 
-			businessLocation, 
-			IDNumber, 
-			industryType, 
-			email, 
-			telephone, 
-			password 
-		} = req.body
+		const { firstName, lastName, businessName, businessLocation, IDNumber, industryType, email, telephone, password } = req.body
 
-		const vendor = await Vendor.create({
-			firstName, 
-			lastName, 
-			businessName, 
-			businessLocation, 
-			IDNumber, 
-			industryType, 
-			email, 
-			telephone, 
-			password 
-		})
+		const vendor = await Vendor.create({ firstName, lastName, businessName, businessLocation, IDNumber, industryType, email, telephone, password })
 
 		sendVendorToken(vendor, 201, res)
 		
@@ -117,7 +97,7 @@ exports.vendorForgotPassword = async (req, res, next) => {
 			vendor.resetPasswordExpiry = undefined
 
 			await vendor.save()
-			return next(new ErrorResponse("Email could not be sent", 500))
+			return next(new ErrorResponse("Something went wrong when sending the email", 500))
 		}
 
 	} catch (error) {

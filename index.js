@@ -16,6 +16,7 @@ connectDB()
 
 // middleware imports
 app.use(express.json())
+app.use("/api/admin", require("./routes/admin"))
 app.use("/api/sender", require("./routes/sender"))
 app.use("/api/vendor", require("./routes/vendor"))
 app.use("/api/transporter", require("./routes/transporter"))

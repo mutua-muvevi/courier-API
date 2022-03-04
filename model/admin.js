@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 // the admin Schema
-const AdminSchema = mongoose.Schema({
+const AdminSchema = new mongoose.Schema({
 	firstName: {
 		type: String,
 		minlength: [3, "This field requires a minimum of 3 characters"],
@@ -17,6 +17,27 @@ const AdminSchema = mongoose.Schema({
 		minlength: [3, "This field requires a minimum of 3 characters"],
 		maxlength: [50, "This field requires a maximum of 50 characters"],
 		required: [true, "Please provide lastName"],
+		trim: true
+	},
+	country: {
+		type: String,
+		minlength: [3, "This field requires a minimum of 3 characters"],
+		maxlength: [50, "This field requires a maximum of 50 characters"],
+		required: [true, "Please provide your country"],
+		trim: true
+	},
+	city: {
+		type: String,
+		minlength: [3, "This field requires a minimum of 3 characters"],
+		maxlength: [50, "This field requires a maximum of 50 characters"],
+		required: [true, "Please provide your city"],
+		trim: true
+	},
+	position: {
+		type: String,
+		minlength: [3, "This field requires a minimum of 3 characters"],
+		maxlength: [50, "This field requires a maximum of 50 characters"],
+		required: [true, "Please provide your position in 940track company"],
 		trim: true
 	},
 	telephone: {
@@ -47,7 +68,7 @@ const AdminSchema = mongoose.Schema({
 	resetPasswordExpiry : Date
 })
 
-// hashing the passwords method
+// hashing the passwrd before reaching the database
 AdminSchema.pre("save", async function(next){
 	if(!this.isModified("password")){
 		next()
@@ -58,27 +79,32 @@ AdminSchema.pre("save", async function(next){
 	next()
 })
 
-// matching password method
-AdminSchema.methods.matchAdminPassword = async function(password){
+// method for comparing password
+AdminSchema.methods.comparePassword = async function(password){
 	return await bcrypt.compare(password, this.password)
 }
 
-// generating jwt sign token method
+// method for generating json web token
 AdminSchema.methods.genAdminToken = function(){
 	return jwt.sign(
 		{id: this._id},
 		process.env.JWT_SECRET,
-		{expiresIn : JWT.EXPIRY}
+		{expiresIn: process.env.JWT_EXPIRY}
 	)
 }
 
+// method that will generate the reset token
+AdminSchema.methods.genPasswordResetToken = function(){
+	const resetAdminToken = crypto.randomBytes(10).toString("hex");
 
+	this.resetPasswordToken = crypto
+		.createHash("sha256")
+		.update(resetAdminToken)
+		.digest("hex")
+	
+	this.resetPasswordExpiry = Date.now() + 30 * (60 * 1000)
+	return resetAdminToken
+}
 
-
-
-
-
-// the model
 const Admin = mongoose.model("Admin", AdminSchema)
-
 module.exports = Admin

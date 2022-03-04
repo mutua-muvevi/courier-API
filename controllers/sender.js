@@ -96,7 +96,7 @@ exports.senderForgotPassword = async (req, res, next) => {
 			sender.resetPasswordExpiry = undefined
 
 			await sender.save()
-			return next(new ErrorResponse("Email could not be send", 500))
+			return next(new ErrorResponse("Something went wrong when sending the email", 500))
 		}
 		 
 	} catch (error) {

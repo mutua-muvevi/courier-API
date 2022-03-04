@@ -5,30 +5,10 @@ const crypto = require("crypto");
 
 // registering a new transporter
 exports.transporterRegister = async (req, res, next) => {
-	const {
-		firstName,
-		lastName,
-		aboutSelf,
-		photo,
-		currentLocation,
-		IDNumber,
-		telephone,
-		email,
-		password
-	} = req.body
+	const {firstName, lastName, aboutSelf, photo, currentLocation, IDNumber, telephone, email, password } = req.body
 
 	try {
-		const transporter = await Transporter.create({
-			firstName,
-			lastName,
-			aboutSelf,
-			photo,
-			currentLocation,
-			IDNumber,
-			telephone,
-			email,
-			password
-		})
+		const transporter = await Transporter.create({firstName, lastName, aboutSelf, photo, currentLocation, IDNumber, telephone, email, password })
 
 		sendTransporterToken(transporter, 201, res)
 
@@ -110,7 +90,7 @@ exports.transporterForgotPassword = async (req, res, next) => {
 			transporter.resetPasswordExpiry = undefined
 
 			await transporter.save()
-			return next(new ErrorResponse("Email could not be sent", 500))
+			return next(new ErrorResponse("Something went wrong when sending the email", 500))
 		}
 
 	} catch (error) {
