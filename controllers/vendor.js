@@ -8,6 +8,12 @@ exports.vendorRegistration = async (req, res, next) => {
 	try {
 		const { firstName, lastName, businessName, businessLocation, IDNumber, industryType, email, telephone, password } = req.body
 
+		const vendorExists = await Vendor.findOne({businessName, IDNumber, email, telephone})
+
+		if(vendorExists){
+			return next(new ErrorResponse("Vendor account can not be created with these credentials, try updating some of them", 400))
+		}
+
 		const vendor = await Vendor.create({ firstName, lastName, businessName, businessLocation, IDNumber, industryType, email, telephone, password })
 
 		sendVendorToken(vendor, 201, res)

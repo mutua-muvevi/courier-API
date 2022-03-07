@@ -8,9 +8,15 @@ const Transporter = require("../model/transporter");
 
 // registering the admin
 exports.adminRegister = async (req, res, next) => {
-	const {firstName,lastName, country, city, position, telephone, email, password } = req.body
-
 	try {
+		const {firstName,lastName, country, city, position, telephone, email, password } = req.body
+
+		const adminExists = await Admin.findOne({email, telephone})
+
+		if(adminExists){
+			return next(new ErrorResponse("Admin account can not be created with these credentials, try updating some of them", 400))
+		}
+
 		const admin = await Admin.create({firstName,lastName, country, city, position, telephone, email, password })
 
 		sendAdminToken(admin,201, res)

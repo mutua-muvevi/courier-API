@@ -3,12 +3,12 @@ const ErrorResponse = require("../utils/errorResponse");
 
 // posting vehicles
 exports.postvehicles = async (req, res, next) => {
-    const { type, maxload, IDNumber, range } = req.body
-
+    
     try {
-
-        const vehicleExist = await Vehicle.findOne({IDNumber})
+        const { type, maxload, IDNumber, range } = req.body
         
+        const vehicleExist = await Vehicle.findOne({IDNumber})
+
         if(vehicleExist){
             return next(new ErrorResponse("This vehicle already exist", 400))
         }

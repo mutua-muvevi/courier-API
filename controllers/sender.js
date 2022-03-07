@@ -6,8 +6,13 @@ const crypto = require("crypto");
 exports.senderRegister = async (req, res, next) => {
 
 	try {
-		
 		const {firstName, lastName, location, email, telephone, password } = req.body
+		
+		const senderExists = await Sender.findOne({email})
+
+		if(senderExists){
+			return next(new ErrorResponse("Sender account can not be created with these credentials, try updating some of them", 400))
+		}
 
 		const sender = await Sender.create({firstName, lastName, location, email, telephone, password })
 

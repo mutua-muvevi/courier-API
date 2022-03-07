@@ -3,9 +3,9 @@ const ErrorResponse = require("../utils/errorResponse");
 
 // posting the transportation object
 exports.postTransportation = async (req, res, next) => {
-    const { startPoint,  destination, goodsDimension, goodsState, transporter } = req.body
-
     try {
+        const { startPoint,  destination, goodsDimension, goodsState, transporter } = req.body
+
         const transportation = await Transportation.create({ startPoint,  destination, goodsDimension, goodsState, transporter })
 
         res.status(200).json({

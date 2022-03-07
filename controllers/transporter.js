@@ -5,9 +5,15 @@ const crypto = require("crypto");
 
 // registering a new transporter
 exports.transporterRegister = async (req, res, next) => {
-	const {firstName, lastName, aboutSelf, photo, currentLocation, IDNumber, telephone, vehicles, email, password } = req.body
-
 	try {
+		const {firstName, lastName, aboutSelf, photo, currentLocation, IDNumber, telephone, vehicles, email, password } = req.body
+	
+		const transporterExist = await Transporter.findOne({aboutSelf, IDNumber, telephone, email})
+
+		if(transporterExist){
+			return next(new ErrorResponse("Transporter account can not be created with these credentials, try updating some of them", 400))
+		}
+
 		const transporter = await Transporter.create({firstName, lastName, aboutSelf, photo, currentLocation, IDNumber, telephone, vehicles, email, password })
 
 		sendTransporterToken(transporter, 201, res)
