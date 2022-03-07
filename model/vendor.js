@@ -75,7 +75,7 @@ const VendorSchema = new mongoose.Schema({
 	},
 	resetPasswordToken : String,
 	resetPasswordExpiry : Date
-})
+}, {timestamps: true})
 
 // hashing the password before saving to database
 VendorSchema.pre("save", async function(next){

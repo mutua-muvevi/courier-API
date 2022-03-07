@@ -20,6 +20,8 @@ app.use("/api/admin", require("./routes/admin"))
 app.use("/api/sender", require("./routes/sender"))
 app.use("/api/vendor", require("./routes/vendor"))
 app.use("/api/transporter", require("./routes/transporter"))
+app.use("/api/transports", require("./routes/transportation"))
+app.use("/api/vehicles", require("./routes/vehicle"))
 
 // error middleware
 app.use(errorHandler)

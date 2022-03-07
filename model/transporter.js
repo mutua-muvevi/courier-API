@@ -56,6 +56,11 @@ const TransporterSchema = new mongoose.Schema({
 		unique: true,
 		trim: true
 	},
+	vehicles: {
+		type: Array,
+		min: [1, "The manimum amount of vehicle required is One"],
+		max: [500, "The maximum amount of vehicle reqeuired is 500"]
+	},
 	email: {
 		type: String,
 		minlength: [5, "This field requires a minimum of 5 characters"],
@@ -74,7 +79,7 @@ const TransporterSchema = new mongoose.Schema({
 	},
 	resetPasswordToken : String,
 	resetPasswordExpiry : Date
-})
+}, {timestamps: true})
 
 // hashing password before they get saved to the database
 TransporterSchema.pre("save", async function(next){

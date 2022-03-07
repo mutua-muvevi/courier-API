@@ -66,7 +66,7 @@ const AdminSchema = new mongoose.Schema({
 	},
 	resetPasswordToken : String,
 	resetPasswordExpiry : Date
-})
+}, {timestamps: true})
 
 // hashing the passwrd before reaching the database
 AdminSchema.pre("save", async function(next){

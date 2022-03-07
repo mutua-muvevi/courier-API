@@ -53,7 +53,7 @@ const SenderSchema = new mongoose.Schema({
 	resetPasswordToken : String,
 	resetPasswordExpiry : Date
 	
-})
+}, {timestamps: true})
 
 
 // hashing the password before saving to the database

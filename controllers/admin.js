@@ -2,6 +2,9 @@ const Admin = require("../model/admin");
 const ErrorResponse = require("../utils/errorResponse");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
+const Sender = require("../model/sender");
+const Vendor = require("../model/vendor");
+const Transporter = require("../model/transporter");
 
 // registering the admin
 exports.adminRegister = async (req, res, next) => {
@@ -142,6 +145,48 @@ exports.adminResetPassword = async (req, res, next) => {
 		next(error)
 	}
 
+}
+
+// get all senders
+exports.getAllSenders = async (req, res, next) => {
+	try {
+		const senders = await Sender.find({}).sort();
+
+		res.status(200).json({
+			success: true,
+			data: senders
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
+// get all vendors
+exports.getAllVendors = async (req, res, next) => {
+	try {
+		const vendors = await Vendor.find({}).sort();
+
+		res.status(200).json({
+			success: true,
+			data: vendors
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
+// get all transporters
+exports.getAllTransporters = async (req, res, next) => {
+	try {
+		const transporter = await Transporter.find({}).sort();
+
+		res.status(200).json({
+			success: true,
+			data: transporter
+		})
+	} catch (error) {
+		next(error)
+	}
 }
 
 // creating a send token function

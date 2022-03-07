@@ -5,10 +5,10 @@ const crypto = require("crypto");
 
 // registering a new transporter
 exports.transporterRegister = async (req, res, next) => {
-	const {firstName, lastName, aboutSelf, photo, currentLocation, IDNumber, telephone, email, password } = req.body
+	const {firstName, lastName, aboutSelf, photo, currentLocation, IDNumber, telephone, vehicles, email, password } = req.body
 
 	try {
-		const transporter = await Transporter.create({firstName, lastName, aboutSelf, photo, currentLocation, IDNumber, telephone, email, password })
+		const transporter = await Transporter.create({firstName, lastName, aboutSelf, photo, currentLocation, IDNumber, telephone, vehicles, email, password })
 
 		sendTransporterToken(transporter, 201, res)
 
